@@ -1,7 +1,7 @@
 export const Part = (props) => (
     <div>
         <p>
-            {props.part} {props.exercise}
+            {props.part.name} {props.part.exercises}
         </p>
     </div>
 )
