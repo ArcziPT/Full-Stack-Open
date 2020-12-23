@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Statistics = ({good, neutral, bad}) => {
+  if(good == 0 && neutral == 0 && bad == 0)
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+
   const all = good + bad + neutral
   const avg = (good - bad)/all
   const positive = String(good/all * 100) + '%'
