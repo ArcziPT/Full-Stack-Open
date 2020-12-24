@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 const Input = ({text, val, changeHandler}) => (
   <div>
@@ -23,26 +24,20 @@ const AddForm = ({newName, newNameChange, newPhone, newPhoneChange, addNewPerson
 
 const Person = ({person}) => (
   <div>
-    <p>{person.name} {person.phone}</p>
+    <p>{person.name} {person.number}</p>
   </div>
 )
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', phone: '123-456-789'},
-    { name: 'Ada Lovelace', phone: '39-44-5323523' },
-    { name: 'Dan Abramov', phone: '12-43-234345' },
-    { name: 'Mary Poppendieck', phone: '39-23-6423122' }])
+  const [ persons, setPersons ] = useState([])
 
   const [ newName, setNewName ]  = useState('')
   const [ newPhone, setNewPhone ] = useState('')
 
   const [ filterVal, setFilterVal ] = useState('')
-  const [ personsToShow, setPersonsToShow] = useState([...persons])
 
   const filter = (event) => {
     setFilterVal(event.target.value)
-    setPersonsToShow(persons.filter(person => person.name.toLowerCase().includes(event.target.value.toLowerCase())))
   }
 
   const handleChange = (updateFunc) => (event) => updateFunc(event.target.value) 
@@ -51,13 +46,19 @@ const App = () => {
     event.preventDefault()
 
     if(persons.find(person => person.name === newName) === undefined){
-      setPersons(persons.concat({name: newName, phone: newPhone}))
+      setPersons(persons.concat({name: newName, number: newPhone}))
       setNewName('')
       setNewPhone('')
     }else{
       alert(`${newName} is already added to phonebook`)
     }
   }
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(response => {
+      setPersons(response.data)
+    })
+  }, [])
 
   return (
     <div>
@@ -70,7 +71,8 @@ const App = () => {
                addNewPerson={addNewPerson}/>
 
       <h2>Numbers</h2>
-      {personsToShow.map(person => <Person key={person.name} person={person}/>)}
+      {persons.filter(person => person.name.toLowerCase().includes(filterVal.toLocaleLowerCase()))
+                                .map(person => <Person key={person.name} person={person}/>)}
     </div>
   )
 }
