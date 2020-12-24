@@ -11,6 +11,8 @@ const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(props.anecdotes.length).fill(0))
 
+  const m = votes.indexOf(Math.max(...votes))
+
   const showNext = () => {
     const r = Math.floor(Math.random() * props.anecdotes.length)
     console.log(r)
@@ -18,17 +20,21 @@ const App = (props) => {
   }
 
   const vote = () => {
-    const copy = {...votes}
+    const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
   }
 
   return (
     <div>
+      <h1>Random anecdote</h1>
       {props.anecdotes[selected]}
       <p>It has {votes[selected]} votes.</p>
       <Button text="vote" handler={vote}/>
       <Button text="next" handler={showNext}/>
+      <h1>Anectode with most votes</h1>
+      {props.anecdotes[m]}
+      <p>It has {votes[m]} votes.</p>
     </div>
   )
 }
