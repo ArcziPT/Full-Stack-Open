@@ -10,22 +10,40 @@ const Input = ({text, onChange, value}) => (
   </div>
 )
 
-const CountryDetails = ({country}) => (
-  <div>
-    <h1>{country.name}</h1>
-    <br></br>
-    <p>Capital: {country.capital}</p>
-    <p>Population: {country.population}</p>
-    <br></br>
-    <h2>Languages</h2>
-    <br></br>
-    <ul>
-      {country.languages.map(lan => <li key={lan.name}>{lan.name}</li>)}
-    </ul>
-    <br></br>
-    <img src={country.flag} alt="flag" width="100px" height="auto"/>
-  </div>
-)
+const CountryDetails = ({country}) => {
+  const [weather, setWeather] = useState({})
+
+  useEffect(() => {
+    axios.get(`http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${country.capital}`).then(response => {
+      setWeather(response.data.current)
+    })
+  }, [])
+  
+  return (
+    <div>
+      <h1>{country.name}</h1>
+      <br></br>
+      <p>Capital: {country.capital}</p>
+      <p>Population: {country.population}</p>
+      <br></br>
+      <h2>Languages</h2>
+      <br></br>
+      <ul>
+        {country.languages.map(lan => <li key={lan.name}>{lan.name}</li>)}
+      </ul>
+      <br></br>
+      <img src={country.flag} alt="flag" width="100px" height="auto"/>
+      <br></br>
+      {weather && 
+        <div>
+          <h2>Wheater in {country.capital}</h2>
+          <p>Temperature: {weather.temperature} Celcius</p>
+          <p>Wind: {weather.wind_speed} mph {weather.wind_dir}</p>
+        </div>
+      }
+    </div>
+  )
+}
 
 const Countries = ({countries, showClick}) => {
   if(countries.length > 10)
