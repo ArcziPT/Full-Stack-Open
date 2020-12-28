@@ -20,14 +20,14 @@ const CountryDetails = ({country}) => (
     <h2>Languages</h2>
     <br></br>
     <ul>
-      {country.languages.map(lan => <li>{lan.name}</li>)}
+      {country.languages.map(lan => <li key={lan.name}>{lan.name}</li>)}
     </ul>
     <br></br>
     <img src={country.flag} alt="flag" width="100px" height="auto"/>
   </div>
 )
 
-const Countries = ({countries}) => {
+const Countries = ({countries, showClick}) => {
   if(countries.length > 10)
     return (
       <div>
@@ -51,7 +51,12 @@ const Countries = ({countries}) => {
 
   return (
     <div>
-      {countries.map(country => <p>{country.name}</p>)}
+      {countries.map(country => (
+        <div key={country.name}>
+          <p>{country.name}</p>
+          <button onClick={showClick(country.name)}>show</button>
+        </div>
+      ))}
     </div>
   )
 }
@@ -69,10 +74,12 @@ const App = () => {
     })
   }, [])
 
+  const showClick = name => () => setSearchCountry(name)
+
   return (
     <div>
       <Input text="Find countries:" onChange={searchCountryChange} value={searchCountry}/>
-      <Countries countries={countries.filter(country => countryFilter(country.name))}/>
+      <Countries showClick={showClick} countries={countries.filter(country => countryFilter(country.name))}/>
     </div>
   )
 }
