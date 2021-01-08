@@ -23,9 +23,10 @@ const AddForm = ({newName, newNameChange, newPhone, newPhoneChange, addNewPerson
   </form>
 )
 
-const Person = ({person}) => (
+const Person = ({person, deleteHandler}) => (
   <div>
     <p>{person.name} {person.number}</p>
+    <button onClick={deleteHandler}>DELETE</button>
   </div>
 )
 
@@ -55,6 +56,10 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id) => () => {
+    phoneService.deletePerson(id).then(deletedPerson => setPersons(persons.filter(p => p.id != id)))
+  }
+
   useEffect(() => {
     phoneService.getAll().then(retPersons => setPersons(retPersons))
   }, [])
@@ -71,7 +76,7 @@ const App = () => {
 
       <h2>Numbers</h2>
       {persons.filter(person => person.name.toLowerCase().includes(filterVal.toLocaleLowerCase()))
-                                .map(person => <Person key={person.name} person={person}/>)}
+                                .map(person => <Person key={person.name} person={person} deleteHandler={deletePerson(person.id)}/>)}
     </div>
   )
 }
