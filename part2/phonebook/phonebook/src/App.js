@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import phoneService from './services/phones'
+import './index.css'
 
 const Input = ({text, val, changeHandler}) => (
   <div>
@@ -23,6 +24,17 @@ const AddForm = ({newName, newNameChange, newPhone, newPhoneChange, addNewPerson
   </form>
 )
 
+const Notification = ({message}) => {
+  if(message == null)
+    return null
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
 const Person = ({person, deleteHandler}) => (
   <div>
     <p>{person.name} {person.number}</p>
@@ -35,6 +47,7 @@ const App = () => {
   const [ newName, setNewName ]  = useState('')
   const [ newPhone, setNewPhone ] = useState('')
   const [ filterVal, setFilterVal ] = useState('')
+  const [ message, setMessage ] = useState(null)
 
   const filter = (event) => {
     setFilterVal(event.target.value)
@@ -47,6 +60,8 @@ const App = () => {
 
     if(persons.find(person => person.name === newName) === undefined){
       phoneService.add({name: newName, number: newPhone}).then(newPerson => {
+        setMessage(`${newName} added`)
+        setTimeout(() => setMessage(null), 5000)
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewPhone('')
@@ -73,6 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter filterVal={filterVal} filterFunc={filter}/>
 
       <h2>Add new</h2>
