@@ -24,13 +24,13 @@ const AddForm = ({newName, newNameChange, newPhone, newPhoneChange, addNewPerson
   </form>
 )
 
-const Notification = ({message}) => {
-  if(message == null)
+const Notification = ({msg}) => {
+  if(msg == null)
     return null
 
   return (
-    <div className='success'>
-      {message}
+    <div className={msg.type}>
+      {msg.msg}
     </div>
   )
 }
@@ -60,7 +60,7 @@ const App = () => {
 
     if(persons.find(person => person.name === newName) === undefined){
       phoneService.add({name: newName, number: newPhone}).then(newPerson => {
-        setMessage(`${newName} added`)
+        setMessage({msg: `${newName} added`, type: 'success'})
         setTimeout(() => setMessage(null), 5000)
         setPersons(persons.concat(newPerson))
         setNewName('')
@@ -78,7 +78,10 @@ const App = () => {
   }
 
   const deletePerson = (id) => () => {
-    phoneService.deletePerson(id).then(deletedPerson => setPersons(persons.filter(p => p.id != id)))
+    phoneService.deletePerson(id).then(deletedPerson => setPersons(persons.filter(p => p.id != id))).catch(error => {
+      setMessage({msg: 'Already has been removed', type: 'error'})
+      setPersons(persons.filter(p => p.id != id))
+    })
   }
 
   useEffect(() => {
@@ -88,7 +91,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification msg={message}/>
       <Filter filterVal={filterVal} filterFunc={filter}/>
 
       <h2>Add new</h2>
