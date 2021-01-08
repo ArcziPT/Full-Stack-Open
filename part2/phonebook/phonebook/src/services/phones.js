@@ -6,4 +6,6 @@ const add = (person) => axios.post('http://localhost:3001/persons', person).then
 
 const deletePerson = (id) => axios.delete(`http://localhost:3001/persons/${id}`).then(response => response.data)
 
-export default {getAll, add, deletePerson}
+const updatePerson = (id, person) => axios.put(`http://localhost:3001/persons/${id}`, person).then(response => response.data)
+
+export default {getAll, add, deletePerson, updatePerson}

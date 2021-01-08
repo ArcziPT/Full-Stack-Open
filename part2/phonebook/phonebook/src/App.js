@@ -52,7 +52,13 @@ const App = () => {
         setNewPhone('')
       })
     }else{
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already in phonebook. Do you want to update phone number?`)){
+        const person = {...persons.find(p => p.name === newName)}
+        person.number = newPhone
+        phoneService.updatePerson(person.id, person).then(updatedPerson => {
+          setPersons(persons.map(p => p.id != person.id ? p : updatedPerson))
+        })
+      }
     }
   }
 
