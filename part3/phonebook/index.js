@@ -28,6 +28,16 @@ app.get('/api/persons', (request, response) => {
 
 app.post('/api/persons', jsonParser, (request, response) => {
     let person = request.body
+
+    if(person.number == undefined || person.number.length === 0 )
+        return response.status(404).send('Invalid number').end()
+
+    if(person.name == undefined || person.name.length === 0 )
+        return response.status(404).send('Invalid name').end()
+
+    if(persons.filter(p => p.name == person.name).length > 0)
+        return response.status(404).send('Person with this name is already added').end()
+
     person.id = Math.floor(Math.random() * 10000000)
 
     persons = persons.concat(person)
