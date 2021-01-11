@@ -1,4 +1,6 @@
 var bodyParser = require('body-parser')
+var morgan = require('morgan')
+
 const express = require('express')
 const app = express()
 
@@ -22,11 +24,14 @@ let persons = [
     }
 ]
 
+app.use(jsonParser)
+app.use(morgan('tiny'))
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
-app.post('/api/persons', jsonParser, (request, response) => {
+app.post('/api/persons', (request, response) => {
     let person = request.body
 
     if(person.number == undefined || person.number.length === 0 )
