@@ -71,16 +71,16 @@ const App = () => {
         const person = {...persons.find(p => p.name === newName)}
         person.number = newPhone
         phoneService.updatePerson(person.id, person).then(updatedPerson => {
-          setPersons(persons.map(p => p.id != person.id ? p : updatedPerson))
+          setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
         })
       }
     }
   }
 
   const deletePerson = (id) => () => {
-    phoneService.deletePerson(id).then(deletedPerson => setPersons(persons.filter(p => p.id != id))).catch(error => {
+    phoneService.deletePerson(id).then(deletedPerson => setPersons(persons.filter(p => p.id !== id))).catch(error => {
       setMessage({msg: 'Already has been removed', type: 'error'})
-      setPersons(persons.filter(p => p.id != id))
+      setPersons(persons.filter(p => p.id !== id))
     })
   }
 

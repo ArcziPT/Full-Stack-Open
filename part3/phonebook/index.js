@@ -1,5 +1,6 @@
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
+var cors = require('cors')
 
 const express = require('express')
 const app = express()
@@ -24,8 +25,9 @@ let persons = [
     }
 ]
 
+app.use(cors())
 app.use(jsonParser)
-app.use(morgan('tiny'))
+app.use(morgan('dev'))
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
