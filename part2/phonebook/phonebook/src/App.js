@@ -65,14 +65,21 @@ const App = () => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewPhone('')
+      }).catch(error => {
+	setMessage({msg: error.response.data.error, type: 'error'})
+      	setTimeout(() => setMessage(null), 5000)
       })
     }else{
       if(window.confirm(`${newName} is already in phonebook. Do you want to update phone number?`)){
         const person = {...persons.find(p => p.name === newName)}
         person.number = newPhone
-        phoneService.updatePerson(person.id, person).then(updatedPerson => {
+        
+	phoneService.updatePerson(person.id, person).then(updatedPerson => {
           setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
-        })
+        }).catch(error => {
+          setMessage({msg: error.response.data.error, type: 'error'})
+          setTimeout(() => setMessage(null), 5000)
+      	})
       }
     }
   }

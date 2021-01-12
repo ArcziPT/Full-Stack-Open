@@ -44,7 +44,9 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.put('/api/persons/:id', (request, response, next) => {
     const person = request.body
-    Person.findByIdAndUpdate(request.params.id, person, {new: true}).then(person => response.json(person)).catch(error => next(error))
+    delete person.id
+    console.log(person)
+    Person.findByIdAndUpdate(request.params.id, person, {new: true, runValidators: true, context: 'query'}).then(person => response.json(person)).catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
