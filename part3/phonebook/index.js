@@ -17,52 +17,52 @@ app.use(jsonParser)
 app.use(morgan('dev'))
 
 app.get('/api/persons', (request, response, next) => {
-    Person.find({}).then(persons => response.json(persons)).catch(error => next(error))
+  Person.find({}).then(persons => response.json(persons)).catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
-    let person = request.body
+  let person = request.body
 
-    Person.find({name: person.name}).then(result => {            
-        person = new Person(person)
-        person.save().then(result => response.json(result)).catch(error => next(error))
-    }).catch(error => next(error))
+  Person.find({name: person.name}).then(result => {            
+    person = new Person(person)
+    person.save().then(result => response.json(result)).catch(error => next(error))
+  }).catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id).then(person => {
-        if(person)
-            response.json(person)
-        else
-            response.status(404).end()
-    }).catch(error => next(error))
+  Person.findById(request.params.id).then(person => {
+    if(person)
+      response.json(person)
+    else
+      response.status(404).end()
+  }).catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id).then(result => response.status(204).end()).catch(error => next(error))
+  Person.findByIdAndRemove(request.params.id).then(result => response.status(204).end()).catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-    const person = request.body
-    delete person.id
-    console.log(person)
-    Person.findByIdAndUpdate(request.params.id, person, {new: true, runValidators: true, context: 'query'}).then(person => response.json(person)).catch(error => next(error))
+  const person = request.body
+  delete person.id
+  console.log(person)
+  Person.findByIdAndUpdate(request.params.id, person, {new: true, runValidators: true, context: 'query'}).then(person => response.json(person)).catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({error: 'unknown endpoint'})
+  response.status(404).send({error: 'unknown endpoint'})
 }
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error)
+  console.error(error)
 
-    if(error.name === 'CastError')
-        return response.status(400).send({error: 'malformatted id'})
-    if(error.name === 'ValidationError')
-        return response.status(400).json({error: error.message})
+  if(error.name === 'CastError')
+    return response.status(400).send({error: 'malformatted id'})
+  if(error.name === 'ValidationError')
+    return response.status(400).json({error: error.message})
 
-    next(error)
+  next(error)
 }
 app.use(errorHandler)
 
