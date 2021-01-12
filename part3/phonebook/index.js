@@ -23,19 +23,10 @@ app.get('/api/persons', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
     let person = request.body
 
-    if(person.number == undefined || person.number.length === 0 )
-        return response.status(404).send('Invalid number').end()
-
-    if(person.name == undefined || person.name.length === 0 )
-        return response.status(404).send('Invalid name').end()
-
-    Person.find({name: person.name}).then(result => {
-        if(result.length > 0)
-            return response.status(404).send('Person with this name is already added').end()
-            
+    Person.find({name: person.name}).then(result => {            
         person = new Person(person)
         person.save().then(result => response.json(result)).catch(error => next(error))
-    })
+    }).catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -65,7 +56,9 @@ const errorHandler = (error, request, response, next) => {
     console.error(error)
 
     if(error.name === 'CastError')
-        return response.status(404).send({error: 'malformatted id'})
+        return response.status(400).send({error: 'malformatted id'})
+    if(error.name === 'ValidationError')
+        return response.status(400).json({error: error.message})
 
     next(error)
 }
