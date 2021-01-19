@@ -52,6 +52,25 @@ test('has id property', async () => {
     response.body.forEach(b => expect(b.id).toBeDefined())
 })
 
+test('blog added to database', async () => {
+    const blog = {
+        title: 'new title',
+        author: 'new author',
+        url: 'https://newbook.com',
+        likes: 0
+    }
+
+    await api.post('/api/blogs')
+        .send(blog)
+        .expect(201)
+
+    const response = await api.get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(4)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
