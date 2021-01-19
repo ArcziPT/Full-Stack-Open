@@ -71,6 +71,24 @@ test('blog added to database', async () => {
     expect(response.body).toHaveLength(4)
 })
 
+test('when likes not specified, defaults to 0', async () => {
+    const blog = {
+        title: 'new title',
+        author: 'new author',
+        url: 'https://newbook.com'
+    }
+
+    await api.post('/api/blogs')
+        .send(blog)
+        .expect(201)
+
+    const response = await api.get('/api/blogs')
+        .expect(200)
+        .expect('COntent-Type', /application\/json/)
+
+    expect(response.body.filter(b => b.title == blog.title)[0].likes).toEqual(0)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
