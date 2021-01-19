@@ -13,4 +13,9 @@ app.use(express.json())
 
 app.use('/api/blogs', BlogRouter)
 
+app.use((request, response, error) => {
+    console.error(error);
+    response.status(500).send(error.message);
+})
+
 module.exports = app
