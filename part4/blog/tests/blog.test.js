@@ -89,6 +89,18 @@ test('when likes not specified, defaults to 0', async () => {
     expect(response.body.filter(b => b.title == blog.title)[0].likes).toEqual(0)
 })
 
+test('when request misses url or title return error code 400', async () => {
+    const blog = {
+        likes: 100,
+        author: 'new author',
+        url: 'https://newbook.com'
+    }
+
+    await api.post('/api/blogs')
+        .send(blog)
+        .expect(400)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
