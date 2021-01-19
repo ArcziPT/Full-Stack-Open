@@ -44,6 +44,14 @@ test('correct number of results', async () => {
     expect(response.body).toHaveLength(3)
 })
 
+test('has id property', async () => {
+    const response = await api.get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    response.body.forEach(b => expect(b.id).toBeDefined())
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
