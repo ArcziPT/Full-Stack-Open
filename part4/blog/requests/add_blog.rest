@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "My Blog",
+    "title": "My Bloggy",
     "author": "John Smith",
     "url": "http://myblog.com",
     "likes": "10"
