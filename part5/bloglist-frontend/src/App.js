@@ -3,6 +3,61 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+const BlogForm = ({blogs, setBlogs}) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const createBlog = async (event) => {
+    event.preventDefault()
+    try{
+      const blog = await blogService.create({title, author, url})
+      setBlogs(blogs.concat(blog))
+
+      setTitle('')
+      setUrl('')
+      setAuthor('')
+    }catch(exception){
+      console.log(exception)
+    }
+  }
+
+  return (
+    <div>
+      <form onSubmit={createBlog}>
+      <div>
+        title
+          <input
+          type="text"
+          value={title}
+          name="Title"
+          onChange={({ target }) => setTitle(target.value)}
+        />
+      </div>
+      <div>
+        author
+          <input
+          type="text"
+          value={author}
+          name="Author"
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+      </div>
+      <div>
+        url
+          <input
+          type="text"
+          value={url}
+          name="URL"
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+      <button type="submit">CREATE</button>
+      </form> 
+    </div>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
@@ -77,6 +132,7 @@ const App = () => {
     <div>
       <p>{user.username} is logged in</p>
       <button onClick={logout}>LOGOUT</button>
+      <BlogForm blogs={blogs} setBlogs={setBlogs}></BlogForm>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
