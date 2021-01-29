@@ -16,14 +16,17 @@ blogRouter.post('', async (request, response) => {
     if(!request.body.hasOwnProperty('title') || !request.body.hasOwnProperty('url'))
         return response.status(401).end()
 
-    const user = await User.findOne({})
-    const newBlog = {...request.body, user: user._id}
+    if(request.user === null)
+        return response.status(301).json({error: "unauthorized"})
+
+
+    const newBlog = {...request.body, user: request.user._id}
     const blog = new Blog(newBlog)
   
     const result = await blog.save()
     
-    user.blogs = user.blogs.concat(result._id)
-    await user.save()
+    request.user.blogs = request.user.blogs.concat(result._id)
+    await request.user.save()
 
     response.status(201).json(result)
 })
