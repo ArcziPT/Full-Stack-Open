@@ -137,7 +137,6 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
-      blogFormRef.current.toggleVisibility()  
     }
   }, [])
 
