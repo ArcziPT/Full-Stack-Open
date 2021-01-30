@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-const Blog = ({ blog }) => {
+const Blog = ({ blog, removeBlog }) => {
   const [show, setShow] = useState(false)
+
+  const remove = () => {
+    removeBlog(blog.id)
+  }
 
   const info = () => (
     <div>
@@ -8,6 +12,7 @@ const Blog = ({ blog }) => {
       <p>{blog.likes}</p>
       <button>LIKE</button>
       <p>{blog.user.username}</p>
+      <button onClick={remove}>REMOVE</button>
     </div>
   )
 

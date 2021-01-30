@@ -193,6 +193,15 @@ const App = () => {
     </Togglabel>
   )
 
+  const removeBlog = async (id) => {
+    try{
+      const res = await blogService.removeBlog()
+      setBlogs(blogs.filter(b => b.id != id))
+    }catch(exception){
+      console.log(exception)
+    }
+  }
+
   return (
     <div>
       {user === null ? loginForm() : info()}
