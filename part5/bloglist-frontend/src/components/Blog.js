@@ -8,14 +8,13 @@ const Blog = ({ blog }) => {
       <p>{blog.likes}</p>
       <button>LIKE</button>
       <p>{blog.user.username}</p>
-      <button onClick={() => setShow(false)}>HIDE</button>
     </div>
   )
 
   return (
     <div>
       {blog.title} {blog.author}
-      <button onClick={() => setShow(true)}>VIEW</button>
+      <button onClick={() => setShow(!show)}>{show ? 'HIDE' : 'VIEW'}</button>
       {show && info()}
     </div>
   )
