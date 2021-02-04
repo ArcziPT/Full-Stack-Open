@@ -2,59 +2,8 @@ import React, { useState, useEffect, useImperativeHandle, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
-const BlogForm = ({addBlog}) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const createBlog = async (event) => {
-    event.preventDefault()
-    try{
-      addBlog({author, title, url})
-      setTitle('')
-      setUrl('')
-      setAuthor('')
-    }catch(exception){
-      console.log(exception)
-    }
-  }
-
-  return (
-    <div>
-      <form onSubmit={createBlog}>
-      <div>
-        title
-          <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author
-          <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-          <input
-          type="text"
-          value={url}
-          name="URL"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">CREATE</button>
-      </form> 
-    </div>
-  )
-}
+import PropTypes from 'prop-types'
+import BlogForm from './components/BlogForm'
 
 const LoginForm = ({handleLogin}) => {
   const [username, setUsername] = useState('')
@@ -193,7 +142,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglabel buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm blogs={blogs} addBlog={addBlog}></BlogForm>
+      <BlogForm addBlog={addBlog}></BlogForm>
     </Togglabel>
   )
 
