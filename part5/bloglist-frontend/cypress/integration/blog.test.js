@@ -28,4 +28,23 @@ describe('Blog app', function() {
             cy.contains('user is logged in').should('not.exist')
         })
     })
+
+    describe.only('When logged in', function() {
+        beforeEach(function() {
+            cy.contains('login').click()
+            cy.get('#username').type('user')
+            cy.get('#password').type('pass')
+            cy.get('.loginForm').contains('login').click()
+        })
+    
+        it('A blog can be created', function() {
+             cy.contains('new blog').click()
+             cy.get('#title').type('new title')
+             cy.get('#author').type('new author')
+             cy.get('#url').type('http://newbook.com')
+             cy.get('.blogForm').contains('CREATE').click()
+
+             cy.get('.blog')
+        })
+    })
 })
