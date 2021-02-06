@@ -23,7 +23,18 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
+  switch(action.type){
+    case 'VOTE':
+      return state.map(a => {
+        if(a.id === action.id)
+          a.votes++
+        return a
+      })
+  }
+
   return state
 }
+
+export const voteAnectode = (id) => ({type: 'VOTE', id: id})
 
 export default reducer
