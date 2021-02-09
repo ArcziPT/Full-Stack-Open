@@ -9,11 +9,10 @@ const NewAnecdote = () => {
 
     const createAnecdote = async (event) => {
         event.preventDefault()
-        const newAnecdote = await AnecdoteService.create({
+        const newAnecdote = {
             content: event.target.anecdote.value,
             votes: 0
-        })
-        console.log(newAnecdote)
+        }
         dispatch(addAnecdote(newAnecdote))
     }
 
