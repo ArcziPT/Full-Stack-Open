@@ -12,4 +12,9 @@ const create = async (anecdote) => {
     return response.data
 }
 
-export default {getAll, create}
+const vote = async (anecdote) => {
+    const response = await ax.put(`${baseUrl}/${anecdote.id}`, anecdote)
+    return response.data
+}
+
+export default {getAll, create, vote}

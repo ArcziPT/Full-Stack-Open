@@ -10,7 +10,7 @@ const reducer = (state = [], action) => {
 
     case 'VOTE':
       return state.map(a => {
-        if(a.id === action.id)
+        if(a.id === action.anecdote.id)
           a.votes++
         return a
       })
@@ -22,7 +22,10 @@ const reducer = (state = [], action) => {
   return state
 }
 
-export const voteAnectode = (id) => ({type: 'VOTE', id})
+export const voteAnectode = (anecdote) => async dispatch => {
+  const newAnecdote = await anecdotesService.vote({...anecdote, votes: anecdote.votes+1})
+  dispatch({type: 'VOTE', anecdote: newAnecdote})
+}
 
 export const addAnecdote = (newAnecdote) => async dispatch => {
   const anecdote = await anecdotesService.create(newAnecdote)

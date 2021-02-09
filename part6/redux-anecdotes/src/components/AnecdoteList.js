@@ -22,7 +22,7 @@ const AnecdoteList = () => {
         <ul>
             {anecdotes.map(anecdote => (
                 <li key={anecdote.id}>
-                    <Anecdote anecdote={anecdote} onClick={() => dispatch(voteAnectode(anecdote.id))}/>
+                    <Anecdote anecdote={anecdote} onClick={() => dispatch(voteAnectode(anecdote))}/>
                 </li>
             ))}
         </ul>
