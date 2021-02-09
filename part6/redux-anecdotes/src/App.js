@@ -1,18 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {voteAnectode} from './reducers/anecdoteReducer'
+import {initAnecdotes} from './reducers/anecdoteReducer'
 import NewAnecdote from './components/NewAnecdote'
 import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
+import AnecdoteService from './services/anecdotesService'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
 
-  const vote = (id) => {
-    console.log('vote', id)
-    dispatch(voteAnectode(id))
-  }
+  useEffect(() => {
+    AnecdoteService.getAll().then(data => dispatch(initAnecdotes(data)))
+  }, [dispatch])
 
   return (
     <div>
