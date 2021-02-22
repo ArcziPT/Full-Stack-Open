@@ -7,6 +7,7 @@ const BlogRouter = require('./controllers/blog')
 const Config = require('./utils/config')
 const userRouter = require('./controllers/user')
 const loginRouter = require('./controllers/login')
+const testingRouter = require('./controllers/testing')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 require('express-async-errors')
@@ -38,6 +39,10 @@ app.use(async (request, response, next) => {
 app.use('/api/blogs', BlogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+
+if(process.env.NODE_ENV === 'test'){
+  app.use('/api/testing', testingRouter)
+}
 
 const errorHandler = (error, request, response, next) => {
     if (error.name === 'CastError') {
